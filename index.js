@@ -1,30 +1,33 @@
 require('./css/style.css')
-const {initialRoutes, hashRouterPush} = require('./router')
+const {initialRoutes, historyRouterPush} = require('./router')
 const { handleAlarm } = require('./js/alarm.js')
 const { handleMemo } = require('./js/memo.js')
 const { handlePhoto } = require('./js/photo.js')
+const { handleHome } = require('./js/home.js')
 
 // router
 const contentDiv = document.querySelector('#app-content') 
 initialRoutes(contentDiv)
+
 window.onload = () => {
-    const hashLinker = document.querySelectorAll('a.hash')
-    hashLinker.forEach(el => {
-        el.addEventListener('click', (evt) => {
-          const pathName = evt.target.getAttribute('href')
-          hashRouterPush(pathName, contentDiv)
-          if (pathName === "#alarm") {
-            handleAlarm();
-          }
-          if (pathName === "#memo") {
-            handleMemo();
-          }
-          if (pathName === "#photo") {
-            handlePhoto();
-          }
-        })
-      })
-  }
+  const historyLinker = document.querySelectorAll('span.history')
+  historyLinker.forEach(el => {
+    el.addEventListener('click', (evt) => {
+      const pathName = evt.target.getAttribute('route')
+
+      historyRouterPush(pathName, contentDiv)
+      if (pathName === "/alarm") {
+        handleAlarm();
+      }else if (pathName === "/memo") {
+        handleMemo();
+      }else if(pathName === "/photo") {
+        handlePhoto();
+      }else if(pathName === "/home") {
+        handleHome();
+      }
+    })
+  })
+}
 
 // clock
 const clock = document.querySelector("#clock");
