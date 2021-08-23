@@ -1,6 +1,7 @@
 let alarms = localStorage.getItem("alarmList")
-let alarmList = JSON.parse(alarms)
+let alarmList = JSON.parse(alarms) || []
 
+//localstorage에 추가
 function saveAlarm(time){
     const alarmObj = {
         time,
@@ -11,6 +12,7 @@ function saveAlarm(time){
     appendAlarm(alarmObj)
 }
 
+//alarm 삭제
 function deleteAlarm(id){
     const el = document.getElementById(id)
     el.remove()
@@ -19,19 +21,19 @@ function deleteAlarm(id){
     localStorage.setItem("alarmList",JSON.stringify(alarmList))
 }
 
+//div에 append
 function appendAlarm(element){
     const alarmListDiv = document.querySelector(".alarmList")
     const div = document.createElement('div')
     div.className = "alarmOne"
     div.id = element.id
+    // 시간 형식 변경
     const timesplit = element.time.split(":")
     let text = ""
     if(parseInt(timesplit[0])<=12){
         text = "오전 "+timesplit[0]+"시 "+timesplit[1]+"분"
-        //div.append("오전 ",timesplit[0],"시 ",timesplit[1],"분")
     }else{
         text = "오후 "+(timesplit[0]-12)+"시 "+timesplit[1]+"분"
-        //div.append("오후 ",(timesplit[0]-12),"시 ",timesplit[1],"분")
     }
     const innerDiv = document.createElement("div")
     innerDiv.innerHTML = text
@@ -46,6 +48,7 @@ function appendAlarm(element){
     
 }
 
+//alarm list 가져옴
 function loadAlarm(){
     if(alarmList != null){
         alarmList.forEach(element => {
@@ -60,6 +63,10 @@ function handleAlarm(){
     const minSelect = document.querySelector("#minute")
     const saveBtn  = document.querySelector(".saveBtn")
     const newBtn  = document.querySelector(".newBtn")
+    newBtn.style.visibility="visible"
+    document.querySelector(".homeBtn").style.visibility="visible"
+    
+    //select option 생성
     for(var i = 1; i<=12; i++){
         var opt = document.createElement("option")
         opt.value = i
@@ -72,6 +79,7 @@ function handleAlarm(){
         opt.text = i
         minSelect.add(opt,null)    
     }
+    //알람 저장
     saveBtn.addEventListener("click",(e)=>{
         const hour  =12* parseInt(amSelect.options[amSelect.selectedIndex].value) + parseInt(hourSelect.options[hourSelect.selectedIndex].value)
         const minute = minSelect.options[minSelect.selectedIndex].value
