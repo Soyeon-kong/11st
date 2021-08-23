@@ -14,8 +14,7 @@ function saveAlarm(time){
 
 //alarm 삭제
 function deleteAlarm(id){
-    const el = document.getElementById(id)
-    el.remove()
+    document.getElementById("alarm"+id).remove()
     const index = alarmList.findIndex(item => item.id === id)
     alarmList.splice(index, 1)
     localStorage.setItem("alarmList",JSON.stringify(alarmList))
@@ -26,7 +25,7 @@ function appendAlarm(element){
     const alarmListDiv = document.querySelector(".alarmList")
     const div = document.createElement('div')
     div.className = "alarmOne"
-    div.id = element.id
+    div.id = "alarm"+element.id
     // 시간 형식 변경
     const timesplit = element.time.split(":")
     let text = ""
@@ -41,7 +40,7 @@ function appendAlarm(element){
     btn.className = "btn deleteBtn"
     btn.innerHTML = "삭제"
     btn.addEventListener("click",function(e){
-        deleteAlarm(e.target.parentNode.id)
+        deleteAlarm(e.target.parentNode.id.replace("alarm",""))
     })
     div.append(innerDiv,btn)
     alarmListDiv.append(div)
@@ -94,5 +93,6 @@ function handleAlarm(){
 }
 
 module.exports ={
-    handleAlarm
+    handleAlarm,
+    deleteAlarm
 }
